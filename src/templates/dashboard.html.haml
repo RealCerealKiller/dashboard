@@ -17,7 +17,6 @@
       %a{"ng-click" => "paginateNext()"} Next
     %p.clear Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})
 
-
   .gray-bg.clear{"ng-if" => "showDelete"}
     %p.bold Choose deletion method:
     %a.block.mt-5{"ng-click" => "deleteSelectedWithSync()"} Delete and sync

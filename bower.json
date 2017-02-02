@@ -1,13 +1,32 @@
 {
-  "name": "sf-dashboard",
+  "name": "standard-file-dashboard",
   "dependencies": {
     "angular": "1.6.1",
     "angular-ui-router": "^0.3.2",
-    "restangular" : "1.6.1",
-    "moment" : "2.17.1",
-    "sntools" : "0.0.3"
+    "restangular": "1.6.1",
+    "moment": "2.17.1",
+    "sntools": "0.0.3"
   },
   "resolutions": {
     "angular": "1.6.1"
-  }
+  },
+  "homepage": "https://standardfile.org",
+  "description": "A dashboard for managing your Standard File data.",
+  "main": "index.html",
+  "keywords": [
+    "standard-file",
+    "encryption",
+    "data"
+  ],
+  "authors": [
+    "Standard File"
+  ],
+  "license": "GPLv3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
