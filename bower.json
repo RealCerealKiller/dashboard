@@ -1,0 +1,13 @@
+{
+  "name": "sf-dashboard",
+  "dependencies": {
+    "angular": "1.6.1",
+    "angular-ui-router": "^0.3.2",
+    "restangular" : "1.6.1",
+    "moment" : "2.17.1",
+    "sntools" : "0.0.3"
+  },
+  "resolutions": {
+    "angular": "1.6.1"
+  }
+}

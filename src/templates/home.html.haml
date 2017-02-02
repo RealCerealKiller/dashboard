@@ -1,0 +1,13 @@
+%section
+  %h1 Standard File Dashboard
+
+  %form{"style" => "width: 400px; max-width: 400px; overflow: hidden;"}
+    %input.form-control{"placeholder" => "Server URL", "ng-model" => "formData.server"}
+    %input.form-control{"placeholder" => "Email or unique identifier", "ng-model" => "formData.email"}
+    %p.bold.mt-15 Enter your server password:
+    %em Do not enter your login password here. Instead, use Standard Notes to find your "Server" password.
+    %input.form-control.mt-10{"placeholder" => "Server password", "ng-model" => "formData.password"}
+    %button.black.mt-15{"ng-click" => "submitLogin()"} Login
+
+    .mt-15.red.center-align.bold{"ng-if" => "formData.error"}
+      Error: {{formData.error.message}}
