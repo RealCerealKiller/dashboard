@@ -6,7 +6,7 @@ class HomeCtrl {
     if($stateParams.server) {
       $scope.formData.server = $stateParams.server;
     } else {
-      $scope.formData.server = "http://localhost:3000"
+      $scope.formData.server = "https://n3.standardnotes.org";
     }
 
     $scope.formData.email = $stateParams.id;
