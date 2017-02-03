@@ -81,7 +81,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('templates/home.html',
-    "<section>\n" +
+    "<section ng-if='!signedIn'>\n" +
     "  <h1>Standard File Dashboard</h1>\n" +
     "  <form style='width: 400px; max-width: 400px; overflow: hidden;'>\n" +
     "    <input class='form-control' ng-model='formData.server' placeholder='Server URL'>\n" +
@@ -94,7 +94,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "      Error: {{formData.error.message}}\n" +
     "    </div>\n" +
     "  </form>\n" +
-    "</section>\n"
+    "</section>\n" +
+    "<div ng-controller='DashboardCtrl' ng-if='signedIn' ng-include='' src=\"'templates/dashboard.html'\"></div>\n"
   );
 
 }]);

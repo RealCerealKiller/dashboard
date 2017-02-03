@@ -30,9 +30,11 @@ var BaseCtrl = function BaseCtrl($rootScope, $state) {
     return $rootScope.getServer() + "/" + path;
   };
 
+  $rootScope.signedIn = sessionStorage.getItem("jwt");
+
   $rootScope.signout = function () {
     sessionStorage.clear();
-    $state.go("home");
+    $rootScope.signedIn = false;
     window.location.reload();
   };
 };
@@ -205,11 +207,6 @@ angular.module('app').controller('DashboardCtrl', DashboardCtrl);
 var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $stateParams) {
   _classCallCheck(this, HomeCtrl);
 
-  if (sessionStorage.getItem("jwt")) {
-    $state.go("dashboard");
-    return;
-  }
-
   $scope.formData = {};
 
   if ($stateParams.server) {
@@ -231,7 +228,7 @@ var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $state
       sessionStorage.setItem("jwt", response.token);
       sessionStorage.setItem("server", $scope.formData.server);
       sessionStorage.setItem("user", JSON.stringify(response.user));
-      $state.go("dashboard");
+      $rootScope.signedIn = true;
     }).catch(function (response) {
       console.log("error:", response);
       $scope.formData.error = response.data.error;
@@ -251,16 +248,6 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
       'content@': {
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl'
-      }
-    }
-  }).state('dashboard', {
-    url: '/dashboard',
-    parent: 'base',
-    params: { token: null, user: null },
-    views: {
-      'content@': {
-        templateUrl: 'templates/dashboard.html',
-        controller: 'DashboardCtrl'
       }
     }
   })

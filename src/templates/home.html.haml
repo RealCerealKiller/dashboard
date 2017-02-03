@@ -1,4 +1,4 @@
-%section
+%section{"ng-if" => "!signedIn"}
   %h1 Standard File Dashboard
 
   %form{"style" => "width: 400px; max-width: 400px; overflow: hidden;"}
@@ -11,3 +11,5 @@
 
     .mt-15.red.center-align.bold{"ng-if" => "formData.error"}
       Error: {{formData.error.message}}
+
+%div{"ng-if" => "signedIn", "ng-include" => "", "src" => "'templates/dashboard.html'", "ng-controller" => "DashboardCtrl"}

@@ -9,9 +9,11 @@ class BaseCtrl {
       return $rootScope.getServer() + "/" + path;
     }
 
+    $rootScope.signedIn = sessionStorage.getItem("jwt");
+
     $rootScope.signout = function() {
       sessionStorage.clear();
-      $state.go("home");
+      $rootScope.signedIn = false;
       window.location.reload();
     }
   }

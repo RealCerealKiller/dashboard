@@ -1,11 +1,6 @@
 class HomeCtrl {
   constructor($rootScope, $scope, Restangular, $state, $stateParams) {
 
-    if(sessionStorage.getItem("jwt")) {
-      $state.go("dashboard");
-      return;
-    }
-
     $scope.formData = {};
 
     if($stateParams.server) {
@@ -27,7 +22,7 @@ class HomeCtrl {
         sessionStorage.setItem("jwt", response.token);
         sessionStorage.setItem("server", $scope.formData.server);
         sessionStorage.setItem("user", JSON.stringify(response.user));
-        $state.go("dashboard");
+        $rootScope.signedIn = true;
       })
       .catch(function(response){
         console.log("error:", response);

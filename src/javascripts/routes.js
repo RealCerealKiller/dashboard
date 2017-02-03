@@ -17,18 +17,6 @@ angular.module('app')
         }
       })
 
-      .state('dashboard', {
-        url: '/dashboard',
-        parent: 'base',
-        params: {token: null, user: null},
-        views: {
-          'content@' : {
-            templateUrl: 'templates/dashboard.html',
-            controller: 'DashboardCtrl'
-          }
-        }
-      })
-
       // 404 Error
       .state('404', {
         parent: 'base',
