@@ -85,6 +85,33 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     }
   };
 
+  $scope.deselect = function (items) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var item = _step2.value;
+
+        item.checked = false;
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+  };
+
   $scope.pageSize = 200;
 
   $scope.setItems = function (items) {
@@ -123,27 +150,27 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
       return;
     }
 
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
 
     try {
-      for (var _iterator2 = selected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        var item = _step2.value;
+      for (var _iterator3 = selected[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var item = _step3.value;
 
         item.deleted = true;
       }
     } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-          _iterator2.return();
+        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+          _iterator3.return();
         }
       } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
+        if (_didIteratorError3) {
+          throw _iteratorError3;
         }
       }
     }
@@ -154,30 +181,31 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     request.sync_token = $scope.syncToken;
     console.log("request items", request.items);
     request.post().then(function (response) {
+      $scope.deselect(selected);
       $scope.showDelete = false;
       var savedItems = response.saved_items;
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator3 = savedItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var savedItem = _step3.value;
+        for (var _iterator4 = savedItems[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var savedItem = _step4.value;
 
           var localItem = _.find($scope.items, { uuid: savedItem.uuid });
           _.merge(localItem, savedItem);
         }
       } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return) {
-            _iterator3.return();
+          if (!_iteratorNormalCompletion4 && _iterator4.return) {
+            _iterator4.return();
           }
         } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
+          if (_didIteratorError4) {
+            throw _iteratorError4;
           }
         }
       }
@@ -193,12 +221,32 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     if (!confirm('Are you sure you want to delete and destroy ' + selected.length + ' items?')) {
       return;
     }
+
+    $scope.destroyItems(selected);
   };
 
   $scope.destroyAll = function () {
     if (!confirm('Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ' + $scope.items.length + ' items?')) {
       return;
     }
+
+    $scope.destroyItems($scope.items);
+  };
+
+  $scope.destroyItems = function (items) {
+    var url = $rootScope.buildURL("items");
+    var request = Restangular.oneUrl(url, url);
+    request.uuids = items.map(function (item) {
+      return item.uuid;
+    });
+    request.remove().then(function (response) {
+      $scope.deselect(items);
+      console.log("destroy response", response);
+      $scope.items = _.difference($scope.items, items);
+      $scope.subItems = _.difference($scope.subItems, items);
+    }).catch(function (response) {
+      console.log("destroy error:", response);
+    });
   };
 };
 

@@ -3,14 +3,14 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('templates/dashboard.html',
     "<div style='position: relative;'>\n" +
-    "  <h1>Dashboard</h1>\n" +
+    "  <h1>Your Dashboard</h1>\n" +
     "  <a class='block' href='https://standardfile.org' style='position: absolute; right: 10px; top: 10px;' target='_blank'>Standard File</a>\n" +
     "  <div class='mt-n15 clear'>\n" +
     "    <p>{{user.email}}</p>\n" +
     "    <p>{{getServer()}}</p>\n" +
     "    <a class='block' ng-click='signout()'>Sign out</a>\n" +
     "  </div>\n" +
-    "  <h2 class='mt-35'>Your items ({{items.length}})</h2>\n" +
+    "  <h2 class='mt-35'>Your items ({{items.length > 0 ? items.length : \"loading...\"}})</h2>\n" +
     "  <div class='mb-10 mt-n10 left'>\n" +
     "    <a class='mr-5' ng-click='selectAll()'>Select All</a>\n" +
     "    <a class='mr-5' ng-click='showDelete = !showDelete'>Delete Selected</a>\n" +

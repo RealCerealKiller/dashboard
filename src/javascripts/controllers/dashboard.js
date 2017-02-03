@@ -21,6 +21,12 @@ class DashboardCtrl {
       }
     }
 
+    $scope.deselect = function(items) {
+      for(var item of items) {
+        item.checked = false;
+      }
+    }
+
     $scope.pageSize = 200;
 
     $scope.setItems = function(items) {
@@ -67,6 +73,7 @@ class DashboardCtrl {
       request.sync_token = $scope.syncToken;
       console.log("request items", request.items);
       request.post().then(function(response){
+        $scope.deselect(selected);
         $scope.showDelete = false;
         var savedItems = response.saved_items;
         for(var savedItem of savedItems) {
@@ -84,12 +91,31 @@ class DashboardCtrl {
       if(!confirm(`Are you sure you want to delete and destroy ${selected.length} items?`)) {
         return;
       }
+
+      $scope.destroyItems(selected)
     }
 
     $scope.destroyAll = function() {
       if(!confirm(`Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ${$scope.items.length} items?`)) {
         return;
       }
+
+      $scope.destroyItems($scope.items)
+    }
+
+    $scope.destroyItems = function(items) {
+      var url = $rootScope.buildURL("items");
+      var request = Restangular.oneUrl(url, url);
+      request.uuids = items.map(function(item){return item.uuid});
+      request.remove().then(function(response){
+        $scope.deselect(items);
+        console.log("destroy response", response);
+        $scope.items = _.difference($scope.items, items);
+        $scope.subItems = _.difference($scope.subItems, items);
+      })
+      .catch(function(response){
+        console.log("destroy error:", response);
+      })
     }
 
   }

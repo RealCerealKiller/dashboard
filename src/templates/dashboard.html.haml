@@ -6,7 +6,7 @@
     %p {{getServer()}}
     %a.block{"ng-click" => "signout()"} Sign out
 
-  %h2.mt-35 Your items ({{items.length}})
+  %h2.mt-35 Your items ({{items.length > 0 ? items.length : "loading..."}})
   %div.mb-10.mt-n10.left
     %a.mr-5{"ng-click" => "selectAll()"} Select All
     %a.mr-5{"ng-click" => "showDelete = !showDelete"} Delete Selected
