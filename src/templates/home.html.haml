@@ -12,4 +12,17 @@
     .mt-15.red.center-align.bold{"ng-if" => "formData.error"}
       Error: {{formData.error.message}}
 
-%div{"ng-if" => "signedIn", "ng-include" => "", "src" => "'templates/dashboard.html'", "ng-controller" => "DashboardCtrl"}
+
+.col-container.wrap{"ng-if" => "signedIn", "ng-init" => "showData = true"}
+  .col-15.mt-25.gray-bg{"style" => "margin-right: 20px;"}
+    %div.mt-n15.clear
+      %h3 Your Dashboard
+      %p {{user.email}}
+      %p {{getServer()}}
+    %a.block.mt-15{"ng-click" => "showData = true; showExtensions = false;"} Data
+    %a.block.mt-5{"ng-click" => "showData = false; showExtensions = true;"} Extensions
+    %a.block.mt-5{"ng-click" => "signout()"} Sign out
+    %a.block.mt-35{"href" => "https://standardfile.org", "target" => "_blank"} Standard File
+  .col-80
+    %div{"ng-if" => "showData", "ng-include" => "", "src" => "'templates/dashboard.html'", "ng-controller" => "DashboardCtrl"}
+    %div{"ng-if" => "showExtensions", "ng-include" => "", "src" => "'templates/extensions.html'", "ng-controller" => "ExtensionsCtrl"}

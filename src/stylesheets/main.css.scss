@@ -4,10 +4,16 @@ body, html {
   font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
   margin: 15px;
+  height: 100%;
 }
 
 h1 {
   border-bottom: 1px solid black;
+}
+
+h3 {
+  padding-bottom: 0px;
+  margin-bottom: 2px;
 }
 
 h4 {
@@ -197,8 +203,21 @@ button {
   padding-bottom: 10px !important;
 }
 
+.pl-20 {
+  padding-left: 20px !important;
+}
+
+.pr-20 {
+  padding-right: 20px !important;
+}
+
 .large-padding {
   padding: 22px !important;
+}
+
+.no-v-padding {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 .red {
@@ -272,4 +291,35 @@ button {
     background-color: #fff;
     background-image: none;
     border: 1px solid #ccc;
+}
+
+.col-container {
+  white-space: nowrap;
+}
+
+@mixin col($width) {
+  width: $width;
+  display: inline-block;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.col-10 {
+  @include col(10%);
+}
+
+.col-15 {
+  @include col(15%);
+}
+
+.col-20 {
+  @include col(20%);
+}
+
+.col-50 {
+  @include col(50%);
+}
+
+.col-80 {
+  @include col(80%);
 }

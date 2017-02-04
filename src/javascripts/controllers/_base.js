@@ -1,6 +1,8 @@
 class BaseCtrl {
   constructor($rootScope, $state) {
 
+    $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
+
     $rootScope.getServer = function() {
       return sessionStorage.getItem("server");
     }

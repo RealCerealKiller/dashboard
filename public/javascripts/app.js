@@ -24,6 +24,8 @@ angular.module('app', [
 ;class BaseCtrl {
   constructor($rootScope, $state) {
 
+    $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
+
     $rootScope.getServer = function() {
       return sessionStorage.getItem("server");
     }
@@ -45,7 +47,6 @@ angular.module('app', [
 angular.module('app').controller('BaseCtrl', BaseCtrl);
 ;class DashboardCtrl {
   constructor($rootScope, $scope, Restangular, $stateParams) {
-    $scope.user = JSON.parse(sessionStorage.getItem("user"));
 
     $scope.sync = function() {
       var url = $rootScope.buildURL("items/sync");
@@ -75,13 +76,13 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
     $scope.pageSize = 200;
 
     $scope.setItems = function(items) {
-      $scope.items = items;
+      $rootScope.items = items;
       $scope.currentItemsIndex = 0;
       $scope.paginate();
     }
 
     $scope.paginate = function() {
-      $scope.subItems = $scope.items.slice($scope.currentItemsIndex, $scope.currentItemsIndex + $scope.pageSize);
+      $scope.subItems = $rootScope.items.slice($scope.currentItemsIndex, $scope.currentItemsIndex + $scope.pageSize);
     }
 
     $scope.paginatePrev = function() {
@@ -93,8 +94,8 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
     }
 
     $scope.paginateNext = function() {
-      if($scope.currentItemsIndex + $scope.pageSize >= $scope.items.length) {
-        $scope.currentItemsIndex = $scope.items.length - $scope.pageSize;
+      if($scope.currentItemsIndex + $scope.pageSize >= $rootScope.items.length) {
+        $scope.currentItemsIndex = $rootScope.items.length - $scope.pageSize;
       } else {
         $scope.currentItemsIndex += $scope.pageSize;
       }
@@ -122,7 +123,7 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
         $scope.showDelete = false;
         var savedItems = response.saved_items;
         for(var savedItem of savedItems) {
-          var localItem = _.find($scope.items, {uuid: savedItem.uuid});
+          var localItem = _.find($rootScope.items, {uuid: savedItem.uuid});
           _.merge(localItem, savedItem);
         }
       })
@@ -141,11 +142,11 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
     }
 
     $scope.destroyAll = function() {
-      if(!confirm(`Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ${$scope.items.length} items?`)) {
+      if(!confirm(`Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ${$rootScope.items.length} items?`)) {
         return;
       }
 
-      $scope.destroyItems($scope.items)
+      $scope.destroyItems($rootScope.items)
     }
 
     $scope.destroyItems = function(items) {
@@ -155,7 +156,7 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
       request.remove().then(function(response){
         $scope.deselect(items);
         console.log("destroy response", response);
-        $scope.items = _.difference($scope.items, items);
+        $rootScope.items = _.difference($rootScope.items, items);
         $scope.subItems = _.difference($scope.subItems, items);
       })
       .catch(function(response){
@@ -167,6 +168,81 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
 }
 
 angular.module('app').controller('DashboardCtrl', DashboardCtrl);
+;class ExtensionsCtrl {
+  constructor($rootScope, $scope, Restangular, $state, $stateParams) {
+
+    let extType = "SF|Extension";
+
+    function decodeContent(contentString) {
+      var jsonString = atob(contentString.slice(3, contentString.length));
+      var content = JSON.parse(jsonString);
+      return content;
+    }
+
+    $scope.getInitialExtensions = function() {
+      $scope.extensions = $rootScope.items.filter(function(item){
+        return item.content_type == extType;
+      })
+      $scope.decodeExtensions();
+    }
+
+    $scope.decodeExtensions = function() {
+      for(var ext of $scope.extensions) {
+        if(typeof ext.content === 'string' || ext.content instanceof String) {
+          ext.content = decodeContent(ext.content);
+        }
+      }
+    }
+
+    $scope.getInitialExtensions();
+
+    $scope.performBackupForExt = function(ext) {
+      if(!confirm("Performing an initial backup can take several minutes, depending on the number of items you have. You do not have to stick around for this process to complete.")) {
+        return;
+      }
+
+      ext.performingBackup = true;
+
+      var url = $scope.buildURL("items/backup");
+      var request = Restangular.oneUrl(url, url);
+      request.uuid = ext.uuid;
+      request.post().then(function(response){
+        ext.performingBackup = false;
+        console.log("Perform backup success: ", response);
+      })
+      .catch(function(response){
+        ext.performingBackup = false;
+        alert("There was an error performing this backup. Please try again. Error: " + response.plain());
+        console.log("Perform backup error:", response);
+      })
+    }
+
+    $scope.formData = {url: ""};
+    $scope.addExtension = function() {
+      var content = {
+        url: $scope.formData.url
+      };
+
+      var encodedContent = "000" + btoa(JSON.stringify(content));
+      var ext = {content_type: extType, content: encodedContent};
+
+      var url = $scope.buildURL("items")
+      var request = Restangular.oneUrl(url, url);
+      request.item = ext;
+      request.post().then(function(response){
+        console.log("response:", response);
+        $scope.extensions.push(response.plain().item);
+        $scope.decodeExtensions();
+      })
+      .catch(function(response){
+        console.log("error adding ext:", response);
+      })
+    }
+
+  }
+}
+
+angular.module('app').controller('ExtensionsCtrl', ExtensionsCtrl);
 ;class HomeCtrl {
   constructor($rootScope, $scope, Restangular, $state, $stateParams) {
 

@@ -1,60 +1,54 @@
-%div{"style" => "position: relative;"}
-  %h1 Your Dashboard
-  %a.block{"href" => "https://standardfile.org", "target" => "_blank", "style" => "position: absolute; right: 10px; top: 10px;"} Standard File
-  %div.mt-n15.clear
-    %p {{user.email}}
-    %p {{getServer()}}
-    %a.block{"ng-click" => "signout()"} Sign out
+%h1 Data
 
-  %h2.mt-35 Your items ({{items.length > 0 ? items.length : "loading..."}})
-  %div.mb-10.mt-n10.left
-    %a.mr-5{"ng-click" => "selectAll()"} Select All
-    %a.mr-5{"ng-click" => "showDelete = !showDelete"} Delete Selected
-    %a.mr-5{"ng-click" => "showAdvanced = !showAdvanced"} Advanced
-  %div.mb-10.mt-n10.right
-    .right
-      %a{"ng-click" => "paginatePrev()"} Previous
-      %a{"ng-click" => "paginateNext()"} Next
-    %p.clear Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})
+%h2.mt-35 Your items ({{items ? items.length : "loading..."}})
+%div.mb-10.mt-n10.left
+  %a.mr-5{"ng-click" => "selectAll()"} Select All
+  %a.mr-5{"ng-click" => "showDelete = !showDelete"} Delete Selected
+  %a.mr-5{"ng-click" => "showAdvanced = !showAdvanced"} Advanced
+%div.mb-10.mt-n10.right
+  .right
+    %a{"ng-click" => "paginatePrev()"} Previous
+    %a{"ng-click" => "paginateNext()"} Next
+  %p.clear Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})
 
-  .gray-bg.clear{"ng-if" => "showDelete"}
-    %p.bold Choose deletion method:
-    %a.block.mt-5{"ng-click" => "deleteSelectedWithSync()"} Delete and sync
-    %a.block.mt-5{"ng-click" => "destroySelected()"} Delete and destroy
-    %p.bold.mt-10 Delete and sync:
-    %p
-      This will delete the content from the database, such as title and text, but keep the metadata of the item in the database, such as ID and the date the item was modified.
-      This will allow other devices to sync this item and remove it from their local copy.
-    %p.bold.mt-10 Delete and destroy:
-    %p
-      This deletes the item completely and immediately from the database, and does not give other devices signed in to the account the chance to sync the deletion.
-      You will instead have to manually delete the item from those devices.
+.gray-bg.clear{"ng-if" => "showDelete"}
+  %p.bold Choose deletion method:
+  %a.block.mt-5{"ng-click" => "deleteSelectedWithSync()"} Delete and sync
+  %a.block.mt-5{"ng-click" => "destroySelected()"} Delete and destroy
+  %p.bold.mt-10 Delete and sync:
+  %p
+    This will delete the content from the database, such as title and text, but keep the metadata of the item in the database, such as ID and the date the item was modified.
+    This will allow other devices to sync this item and remove it from their local copy.
+  %p.bold.mt-10 Delete and destroy:
+  %p
+    This deletes the item completely and immediately from the database, and does not give other devices signed in to the account the chance to sync the deletion.
+    You will instead have to manually delete the item from those devices.
 
-  .gray-bg.clear{"ng-if" => "showAdvanced"}
-    %a.block.red{"ng-click" => "destroyAll()"} Destroy all data
-    %p Destroying all data will permanently delete all your data, without giving your devices the chance to sync the deletions. You should sign out of all devices before continuing with this option.
+.gray-bg.clear{"ng-if" => "showAdvanced"}
+  %a.block.red{"ng-click" => "destroyAll()"} Destroy all data
+  %p Destroying all data will permanently delete all your data, without giving your devices the chance to sync the deletions. You should sign out of all devices before continuing with this option.
 
-  %table.mt-15.clear
-    %tr
-      %th Select
-      %th Item ID
-      %th Type
-      %th Content
-      %th Created
-      %th Last Modified
-      %th Deleted
-    %tr{"ng-repeat" => "item in subItems"}
-      %td{"style" => "width: 4%; min-width: 50px;"}
-        %input{"type" => "checkbox", "ng-model" => "item.checked"}
-      %td{"style" => "min-width: 100px;"}
-        %p {{item.uuid}}
-      %td{"style" => "min-width: 50px;"}
-        %p {{item.content_type}}
-      %td{"style" => "min-width: 70px;"}
-        %p.clamp-2{"style" => "max-height: 300px;"} {{item.content}}
-      %td{"style" => "min-width: 70px;"}
-        %p {{item.created_at}}
-      %td{"style" => "min-width: 105px;"}
-        %p {{item.updated_at}}
-      %td
-        %p{"style" => "width: 60px;"} {{item.deleted}}
+%table.mt-15.clear
+  %tr
+    %th Select
+    %th Item ID
+    %th Type
+    %th Content
+    %th Created
+    %th Last Modified
+    %th Deleted
+  %tr{"ng-repeat" => "item in subItems"}
+    %td{"style" => "width: 4%; min-width: 50px;"}
+      %input{"type" => "checkbox", "ng-model" => "item.checked"}
+    %td{"style" => "min-width: 100px;"}
+      %p {{item.uuid}}
+    %td{"style" => "min-width: 50px;"}
+      %p {{item.content_type}}
+    %td{"style" => "min-width: 70px;"}
+      %p.clamp-2{"style" => "max-height: 300px;"} {{item.content}}
+    %td{"style" => "min-width: 70px;"}
+      %p {{item.created_at}}
+    %td{"style" => "min-width: 105px;"}
+      %p {{item.updated_at}}
+    %td
+      %p{"style" => "width: 60px;"} {{item.deleted}}

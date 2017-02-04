@@ -1,6 +1,5 @@
 class DashboardCtrl {
   constructor($rootScope, $scope, Restangular, $stateParams) {
-    $scope.user = JSON.parse(sessionStorage.getItem("user"));
 
     $scope.sync = function() {
       var url = $rootScope.buildURL("items/sync");
@@ -30,13 +29,13 @@ class DashboardCtrl {
     $scope.pageSize = 200;
 
     $scope.setItems = function(items) {
-      $scope.items = items;
+      $rootScope.items = items;
       $scope.currentItemsIndex = 0;
       $scope.paginate();
     }
 
     $scope.paginate = function() {
-      $scope.subItems = $scope.items.slice($scope.currentItemsIndex, $scope.currentItemsIndex + $scope.pageSize);
+      $scope.subItems = $rootScope.items.slice($scope.currentItemsIndex, $scope.currentItemsIndex + $scope.pageSize);
     }
 
     $scope.paginatePrev = function() {
@@ -48,8 +47,8 @@ class DashboardCtrl {
     }
 
     $scope.paginateNext = function() {
-      if($scope.currentItemsIndex + $scope.pageSize >= $scope.items.length) {
-        $scope.currentItemsIndex = $scope.items.length - $scope.pageSize;
+      if($scope.currentItemsIndex + $scope.pageSize >= $rootScope.items.length) {
+        $scope.currentItemsIndex = $rootScope.items.length - $scope.pageSize;
       } else {
         $scope.currentItemsIndex += $scope.pageSize;
       }
@@ -77,7 +76,7 @@ class DashboardCtrl {
         $scope.showDelete = false;
         var savedItems = response.saved_items;
         for(var savedItem of savedItems) {
-          var localItem = _.find($scope.items, {uuid: savedItem.uuid});
+          var localItem = _.find($rootScope.items, {uuid: savedItem.uuid});
           _.merge(localItem, savedItem);
         }
       })
@@ -96,11 +95,11 @@ class DashboardCtrl {
     }
 
     $scope.destroyAll = function() {
-      if(!confirm(`Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ${$scope.items.length} items?`)) {
+      if(!confirm(`Danger: you are about to permanently delete all your items. Are you sure you want to delete and destroy ${$rootScope.items.length} items?`)) {
         return;
       }
 
-      $scope.destroyItems($scope.items)
+      $scope.destroyItems($rootScope.items)
     }
 
     $scope.destroyItems = function(items) {
@@ -110,7 +109,7 @@ class DashboardCtrl {
       request.remove().then(function(response){
         $scope.deselect(items);
         console.log("destroy response", response);
-        $scope.items = _.difference($scope.items, items);
+        $rootScope.items = _.difference($rootScope.items, items);
         $scope.subItems = _.difference($scope.subItems, items);
       })
       .catch(function(response){
