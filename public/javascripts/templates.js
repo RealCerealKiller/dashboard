@@ -95,9 +95,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <th style='min-width: 100px;'>\n" +
     "      <p>Enabled</p>\n" +
     "    </th>\n" +
-    "    <td style='min-width: 200px;'>\n" +
-    "      <a class='block' ng-click='performBackupForExt(ext)' ng-if='!ext.performingBackup'>Perform Full Backup</a>\n" +
-    "      <p class='strong' ng-if='ext.performingBackup'>Backing up...</p>\n" +
+    "    <td style='min-width: 210px;'>\n" +
+    "      <a class='block' ng-click='performBackupForExt(ext)' ng-if='!ext.requestSent &amp;&amp; !ext.requestReceived'>Perform Full Backup</a>\n" +
+    "      <p class='strong' ng-if='ext.requestSent'>Sending request...</p>\n" +
+    "      <p class='strong' ng-if='ext.requestReceived'>Backup queued successfully.</p>\n" +
     "    </td>\n" +
     "  </tr>\n" +
     "</table>\n" +

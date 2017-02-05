@@ -19,9 +19,10 @@
       %p {{ext.uuid}}
     %th{"style" => "min-width: 100px;"}
       %p Enabled
-    %td{"style" => "min-width: 200px;"}
-      %a.block{"ng-if" => "!ext.performingBackup", "ng-click" => "performBackupForExt(ext)"} Perform Full Backup
-      %p.strong{"ng-if" => "ext.performingBackup"} Backing up...
+    %td{"style" => "min-width: 210px;"}
+      %a.block{"ng-if" => "!ext.requestSent && !ext.requestReceived", "ng-click" => "performBackupForExt(ext)"} Perform Full Backup
+      %p.strong{"ng-if" => "ext.requestSent"} Sending request...
+      %p.strong{"ng-if" => "ext.requestReceived"} Backup queued successfully.
 
 %h2.mt-25 Add new extension
 %div.mt-10{"style" => "max-width: 400px;"}

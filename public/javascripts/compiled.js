@@ -39179,7 +39179,7 @@ var n=this.__index__>=this.__values__.length;return{done:n,value:n?F:this.__valu
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-angular.module('app', ['ui.router', 'restangular']).config(['RestangularProvider', function (RestangularProvider) {
+angular.module('app', ['ui.router', 'restangular']).config(function (RestangularProvider) {
   RestangularProvider.setDefaultHeaders({ "Content-Type": "application/json" });
   RestangularProvider.setFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
     var token = sessionStorage.getItem("jwt");
@@ -39194,7 +39194,7 @@ angular.module('app', ['ui.router', 'restangular']).config(['RestangularProvider
       httpConfig: httpConfig
     };
   });
-}]);
+});
 var BaseCtrl = function BaseCtrl($rootScope, $state) {
   _classCallCheck(this, BaseCtrl);
 
@@ -39216,7 +39216,6 @@ var BaseCtrl = function BaseCtrl($rootScope, $state) {
     window.location.reload();
   };
 };
-BaseCtrl.$inject = ['$rootScope', '$state'];
 
 angular.module('app').controller('BaseCtrl', BaseCtrl);
 ;
@@ -39426,7 +39425,6 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     });
   };
 };
-DashboardCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$stateParams'];
 
 angular.module('app').controller('DashboardCtrl', DashboardCtrl);
 ;
@@ -39484,16 +39482,17 @@ var ExtensionsCtrl = function ExtensionsCtrl($rootScope, $scope, Restangular, $s
       return;
     }
 
-    ext.performingBackup = true;
+    ext.requestSent = true;
 
     var url = $scope.buildURL("items/backup");
     var request = Restangular.oneUrl(url, url);
     request.uuid = ext.uuid;
     request.post().then(function (response) {
-      ext.performingBackup = false;
+      ext.requestSent = false;
+      ext.requestReceived = true;
       console.log("Perform backup success: ", response);
     }).catch(function (response) {
-      ext.performingBackup = false;
+      ext.requestSent = false;
       alert("There was an error performing this backup. Please try again. Error: " + response.plain());
       console.log("Perform backup error:", response);
     });
@@ -39520,7 +39519,6 @@ var ExtensionsCtrl = function ExtensionsCtrl($rootScope, $scope, Restangular, $s
     });
   };
 };
-ExtensionsCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$state', '$stateParams'];
 
 angular.module('app').controller('ExtensionsCtrl', ExtensionsCtrl);
 ;
@@ -39555,10 +39553,9 @@ var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $state
     });
   };
 };
-HomeCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$state', '$stateParams'];
 
 angular.module('app').controller('HomeCtrl', HomeCtrl);
-;angular.module('app').config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
+;angular.module('app').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $stateProvider.state('base', {
     abstract: true
@@ -39592,7 +39589,7 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
 
   // enable HTML5 Mode for SEO
   $locationProvider.html5Mode(true);
-}]);
+});
 
 
 },{}]},{},[1]);
@@ -39693,9 +39690,10 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "    <th style='min-width: 100px;'>\n" +
     "      <p>Enabled</p>\n" +
     "    </th>\n" +
-    "    <td style='min-width: 200px;'>\n" +
-    "      <a class='block' ng-click='performBackupForExt(ext)' ng-if='!ext.performingBackup'>Perform Full Backup</a>\n" +
-    "      <p class='strong' ng-if='ext.performingBackup'>Backing up...</p>\n" +
+    "    <td style='min-width: 210px;'>\n" +
+    "      <a class='block' ng-click='performBackupForExt(ext)' ng-if='!ext.requestSent &amp;&amp; !ext.requestReceived'>Perform Full Backup</a>\n" +
+    "      <p class='strong' ng-if='ext.requestSent'>Sending request...</p>\n" +
+    "      <p class='strong' ng-if='ext.requestReceived'>Backup queued successfully.</p>\n" +
     "    </td>\n" +
     "  </tr>\n" +
     "</table>\n" +

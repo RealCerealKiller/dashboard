@@ -201,17 +201,18 @@ angular.module('app').controller('DashboardCtrl', DashboardCtrl);
         return;
       }
 
-      ext.performingBackup = true;
+      ext.requestSent = true;
 
       var url = $scope.buildURL("items/backup");
       var request = Restangular.oneUrl(url, url);
       request.uuid = ext.uuid;
       request.post().then(function(response){
-        ext.performingBackup = false;
+        ext.requestSent = false;
+        ext.requestReceived = true;
         console.log("Perform backup success: ", response);
       })
       .catch(function(response){
-        ext.performingBackup = false;
+        ext.requestSent = false;
         alert("There was an error performing this backup. Please try again. Error: " + response.plain());
         console.log("Perform backup error:", response);
       })
