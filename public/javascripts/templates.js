@@ -6,7 +6,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<h2 class='mt-35'>Your items ({{items ? items.length : \"loading...\"}})</h2>\n" +
     "<div class='mb-10 mt-n10 left'>\n" +
     "  <a class='mr-5' ng-click='selectAll()'>Select All</a>\n" +
-    "  <a class='mr-5' ng-click='showDelete = !showDelete'>Delete Selected</a>\n" +
+    "  <a class='mr-5' ng-click='deleteData.showDelete = !deleteData.showDelete'>Delete Selected</a>\n" +
     "  <a class='mr-5' ng-click='showAdvanced = !showAdvanced'>Advanced</a>\n" +
     "</div>\n" +
     "<div class='mb-10 mt-n10 right'>\n" +
@@ -16,7 +16,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  </div>\n" +
     "  <p class='clear'>Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})</p>\n" +
     "</div>\n" +
-    "<div class='gray-bg clear' ng-if='showDelete'>\n" +
+    "<div class='gray-bg clear' ng-if='deleteData.showDelete'>\n" +
     "  <p class='bold'>Choose deletion method:</p>\n" +
     "  <a class='block mt-5' ng-click='deleteSelectedWithSync()'>Delete and sync</a>\n" +
     "  <a class='block mt-5' ng-click='destroySelected()'>Delete and destroy</a>\n" +
@@ -102,10 +102,18 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    </td>\n" +
     "  </tr>\n" +
     "</table>\n" +
-    "<h2 class='mt-25'>Add new extension</h2>\n" +
-    "<div class='mt-10' style='max-width: 400px;'>\n" +
-    "  <input class='form-control' ng-model='formData.url' placeholder='Extension secret URL'>\n" +
-    "  <button class='black' ng-click='addExtension()'>Add Extension</button>\n" +
+    "<div class='col-container'>\n" +
+    "  <div class='col-50'>\n" +
+    "    <h2 class='mt-25'>Add new extension</h2>\n" +
+    "    <div class='mt-10' style='max-width: 400px;'>\n" +
+    "      <input class='form-control' ng-model='formData.url' placeholder='Extension secret URL'>\n" +
+    "      <button class='black' ng-click='addExtension()'>Add Extension</button>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <div class='col-50'>\n" +
+    "    <h2 class='mt-25'>Available extensions</h2>\n" +
+    "    <a class='block' href='/ext/dropbox' target='_blank'>Dropbox Backup</a>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 

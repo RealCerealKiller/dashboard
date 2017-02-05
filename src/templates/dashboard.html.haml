@@ -3,7 +3,7 @@
 %h2.mt-35 Your items ({{items ? items.length : "loading..."}})
 %div.mb-10.mt-n10.left
   %a.mr-5{"ng-click" => "selectAll()"} Select All
-  %a.mr-5{"ng-click" => "showDelete = !showDelete"} Delete Selected
+  %a.mr-5{"ng-click" => "deleteData.showDelete = !deleteData.showDelete"} Delete Selected
   %a.mr-5{"ng-click" => "showAdvanced = !showAdvanced"} Advanced
 %div.mb-10.mt-n10.right
   .right
@@ -11,7 +11,7 @@
     %a{"ng-click" => "paginateNext()"} Next
   %p.clear Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})
 
-.gray-bg.clear{"ng-if" => "showDelete"}
+.gray-bg.clear{"ng-if" => "deleteData.showDelete"}
   %p.bold Choose deletion method:
   %a.block.mt-5{"ng-click" => "deleteSelectedWithSync()"} Delete and sync
   %a.block.mt-5{"ng-click" => "destroySelected()"} Delete and destroy

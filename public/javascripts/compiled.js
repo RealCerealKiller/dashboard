@@ -39219,8 +39219,10 @@ var BaseCtrl = function BaseCtrl($rootScope, $state) {
 
 angular.module('app').controller('BaseCtrl', BaseCtrl);
 ;
-var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $stateParams) {
+var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $stateParams, $timeout) {
   _classCallCheck(this, DashboardCtrl);
+
+  $scope.deleteData = {};
 
   $scope.sync = function () {
     var url = $rootScope.buildURL("items/sync");
@@ -39358,7 +39360,7 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     console.log("request items", request.items);
     request.post().then(function (response) {
       $scope.deselect(selected);
-      $scope.showDelete = false;
+      $scope.deleteData.showDelete = false;
       var savedItems = response.saved_items;
       var _iteratorNormalCompletion4 = true;
       var _didIteratorError4 = false;
@@ -39417,7 +39419,7 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     });
     request.remove().then(function (response) {
       $scope.deselect(items);
-      console.log("destroy response", response);
+      $scope.deleteData.showDelete = false;
       $rootScope.items = _.difference($rootScope.items, items);
       $scope.subItems = _.difference($scope.subItems, items);
     }).catch(function (response) {
@@ -39601,7 +39603,7 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "<h2 class='mt-35'>Your items ({{items ? items.length : \"loading...\"}})</h2>\n" +
     "<div class='mb-10 mt-n10 left'>\n" +
     "  <a class='mr-5' ng-click='selectAll()'>Select All</a>\n" +
-    "  <a class='mr-5' ng-click='showDelete = !showDelete'>Delete Selected</a>\n" +
+    "  <a class='mr-5' ng-click='deleteData.showDelete = !deleteData.showDelete'>Delete Selected</a>\n" +
     "  <a class='mr-5' ng-click='showAdvanced = !showAdvanced'>Advanced</a>\n" +
     "</div>\n" +
     "<div class='mb-10 mt-n10 right'>\n" +
@@ -39611,7 +39613,7 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "  </div>\n" +
     "  <p class='clear'>Showing items {{currentItemsIndex}} - {{currentItemsIndex + subItems.length}} (out of {{items.length}})</p>\n" +
     "</div>\n" +
-    "<div class='gray-bg clear' ng-if='showDelete'>\n" +
+    "<div class='gray-bg clear' ng-if='deleteData.showDelete'>\n" +
     "  <p class='bold'>Choose deletion method:</p>\n" +
     "  <a class='block mt-5' ng-click='deleteSelectedWithSync()'>Delete and sync</a>\n" +
     "  <a class='block mt-5' ng-click='destroySelected()'>Delete and destroy</a>\n" +
@@ -39697,10 +39699,18 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "    </td>\n" +
     "  </tr>\n" +
     "</table>\n" +
-    "<h2 class='mt-25'>Add new extension</h2>\n" +
-    "<div class='mt-10' style='max-width: 400px;'>\n" +
-    "  <input class='form-control' ng-model='formData.url' placeholder='Extension secret URL'>\n" +
-    "  <button class='black' ng-click='addExtension()'>Add Extension</button>\n" +
+    "<div class='col-container'>\n" +
+    "  <div class='col-50'>\n" +
+    "    <h2 class='mt-25'>Add new extension</h2>\n" +
+    "    <div class='mt-10' style='max-width: 400px;'>\n" +
+    "      <input class='form-control' ng-model='formData.url' placeholder='Extension secret URL'>\n" +
+    "      <button class='black' ng-click='addExtension()'>Add Extension</button>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <div class='col-50'>\n" +
+    "    <h2 class='mt-25'>Available extensions</h2>\n" +
+    "    <a class='block' href='/ext/dropbox' target='_blank'>Dropbox Backup</a>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 

@@ -46,7 +46,9 @@ angular.module('app', [
 
 angular.module('app').controller('BaseCtrl', BaseCtrl);
 ;class DashboardCtrl {
-  constructor($rootScope, $scope, Restangular, $stateParams) {
+  constructor($rootScope, $scope, Restangular, $stateParams, $timeout) {
+
+    $scope.deleteData = {};
 
     $scope.sync = function() {
       var url = $rootScope.buildURL("items/sync");
@@ -120,7 +122,7 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
       console.log("request items", request.items);
       request.post().then(function(response){
         $scope.deselect(selected);
-        $scope.showDelete = false;
+        $scope.deleteData.showDelete = false;
         var savedItems = response.saved_items;
         for(var savedItem of savedItems) {
           var localItem = _.find($rootScope.items, {uuid: savedItem.uuid});
@@ -155,7 +157,7 @@ angular.module('app').controller('BaseCtrl', BaseCtrl);
       request.uuids = items.map(function(item){return item.uuid});
       request.remove().then(function(response){
         $scope.deselect(items);
-        console.log("destroy response", response);
+        $scope.deleteData.showDelete = false;
         $rootScope.items = _.difference($rootScope.items, items);
         $scope.subItems = _.difference($scope.subItems, items);
       })
