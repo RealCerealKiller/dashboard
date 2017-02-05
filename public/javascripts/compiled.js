@@ -39179,7 +39179,7 @@ var n=this.__index__>=this.__values__.length;return{done:n,value:n?F:this.__valu
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-angular.module('app', ['ui.router', 'restangular']).config(function (RestangularProvider) {
+angular.module('app', ['ui.router', 'restangular']).config(['RestangularProvider', function (RestangularProvider) {
   RestangularProvider.setDefaultHeaders({ "Content-Type": "application/json" });
   RestangularProvider.setFullRequestInterceptor(function (element, operation, route, url, headers, params, httpConfig) {
     var token = sessionStorage.getItem("jwt");
@@ -39194,7 +39194,7 @@ angular.module('app', ['ui.router', 'restangular']).config(function (Restangular
       httpConfig: httpConfig
     };
   });
-});
+}]);
 var BaseCtrl = function BaseCtrl($rootScope, $state) {
   _classCallCheck(this, BaseCtrl);
 
@@ -39216,6 +39216,7 @@ var BaseCtrl = function BaseCtrl($rootScope, $state) {
     window.location.reload();
   };
 };
+BaseCtrl.$inject = ['$rootScope', '$state'];
 
 angular.module('app').controller('BaseCtrl', BaseCtrl);
 ;
@@ -39425,6 +39426,7 @@ var DashboardCtrl = function DashboardCtrl($rootScope, $scope, Restangular, $sta
     });
   };
 };
+DashboardCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$stateParams'];
 
 angular.module('app').controller('DashboardCtrl', DashboardCtrl);
 ;
@@ -39518,6 +39520,7 @@ var ExtensionsCtrl = function ExtensionsCtrl($rootScope, $scope, Restangular, $s
     });
   };
 };
+ExtensionsCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$state', '$stateParams'];
 
 angular.module('app').controller('ExtensionsCtrl', ExtensionsCtrl);
 ;
@@ -39552,9 +39555,10 @@ var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $state
     });
   };
 };
+HomeCtrl.$inject = ['$rootScope', '$scope', 'Restangular', '$state', '$stateParams'];
 
 angular.module('app').controller('HomeCtrl', HomeCtrl);
-;angular.module('app').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+;angular.module('app').config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $stateProvider.state('base', {
     abstract: true
@@ -39588,7 +39592,7 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
 
   // enable HTML5 Mode for SEO
   $locationProvider.html5Mode(true);
-});
+}]);
 
 
 },{}]},{},[1]);
