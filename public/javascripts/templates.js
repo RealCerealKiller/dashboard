@@ -112,7 +112,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "  </div>\n" +
     "  <div class='col-50'>\n" +
     "    <h2 class='mt-25'>Available extensions</h2>\n" +
-    "    <a class='block' href='/ext/dropbox' target='_blank'>Dropbox Backup</a>\n" +
+    "    <a class='block' href='https://extensions.standardnotes.org/dropbox' target='_blank'>Dropbox Backup</a>\n" +
+    "    <a class='block' href='https://standardnotes.org/extensions/revision-history' target='_blank'>Note History</a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
