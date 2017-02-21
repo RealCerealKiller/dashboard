@@ -222,8 +222,15 @@ angular.module('app').controller('DashboardCtrl', DashboardCtrl);
 
     $scope.formData = {url: ""};
     $scope.addExtension = function() {
+      let extUrl = $scope.formData.url;
+
+      if(extUrl.indexOf("type=sn") != -1) {
+        alert("You are attempting to register a Standard Notes extension in Standard File. You should register this URL using the Standard Notes app instead.");
+        return;
+      }
+
       var content = {
-        url: $scope.formData.url
+        url: extUrl
       };
 
       var encodedContent = "000" + btoa(JSON.stringify(content));
