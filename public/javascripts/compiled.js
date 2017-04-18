@@ -39681,11 +39681,11 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
 
 
   $templateCache.put('templates/extensions.html',
-    "<h1>Extensions</h1>\n" +
-    "<p>Standard File extensions allow for your encrypted data to be backed up to multiple places, such as your Dropbox or Google Drive.</p>\n" +
+    "<h1>Sync Adapters</h1>\n" +
+    "<p>Standard File sync adapters allow for your encrypted data to be backed up to multiple places, such as your Dropbox or Google Drive.</p>\n" +
     "<p class='mt-15'>When you make a change to your data (such as modifying a note using Standard Notes), Standard File will automatically backup this item to your backup locations.</p>\n" +
-    "<p class='mt-15'>When you register a new extension, you should choose \"Perform Full Backup\" to perform an initial backup of your existing data.</p>\n" +
-    "<h2 class='mt-25'>Registered extensions ({{extensions.length}})</h2>\n" +
+    "<p class='mt-15'>When you register a new sync adapter, you should choose \"Perform Full Backup\" to perform an initial backup of your existing data.</p>\n" +
+    "<h2 class='mt-25'>Registered sync adapters ({{extensions.length}})</h2>\n" +
     "<table class='mt-15 clear gray-bg'>\n" +
     "  <tr>\n" +
     "    <th>Secret URL</th>\n" +
@@ -39712,16 +39712,14 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "</table>\n" +
     "<div class='col-container'>\n" +
     "  <div class='col-50'>\n" +
-    "    <h2 class='mt-25'>Add new extension</h2>\n" +
+    "    <h2 class='mt-25'>Add new sync adapter</h2>\n" +
     "    <div class='mt-10' style='max-width: 400px;'>\n" +
-    "      <input class='form-control' ng-model='formData.url' placeholder='Extension secret URL'>\n" +
-    "      <button class='black' ng-click='addExtension()'>Add Extension</button>\n" +
+    "      <input class='form-control' ng-model='formData.url' placeholder='Sync adapter secret URL'>\n" +
+    "      <button class='black' ng-click='addExtension()'>Add Sync Adapter</button>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "  <div class='col-50'>\n" +
-    "    <h2 class='mt-25'>Available extensions</h2>\n" +
-    "    <a class='block' href='https://extensions.standardnotes.org/dropbox' target='_blank'>Dropbox Backup</a>\n" +
-    "    <a class='block' href='https://standardnotes.org/extensions/revision-history' target='_blank'>Note History</a>\n" +
+    "    <a class='block' href='https://standardnotes.org/extensions' target='_blank'>Available Sync Adapters</a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -39750,7 +39748,7 @@ angular.module('app').controller('HomeCtrl', HomeCtrl);
     "      <p>{{getServer()}}</p>\n" +
     "    </div>\n" +
     "    <a class='block mt-15' ng-click='showData = true; showExtensions = false;'>Data</a>\n" +
-    "    <a class='block mt-5' ng-click='showData = false; showExtensions = true;'>Extensions</a>\n" +
+    "    <a class='block mt-5' ng-click='showData = false; showExtensions = true;'>Sync Adapters</a>\n" +
     "    <a class='block mt-5' ng-click='signout()'>Sign out</a>\n" +
     "    <a class='block mt-35' href='https://standardfile.org' target='_blank'>Standard File</a>\n" +
     "  </div>\n" +
