@@ -24,6 +24,22 @@ class ExtensionsCtrl {
       }
     }
 
+    $scope.deleteExt = function(ext) {
+      if(!confirm("Are you sure you want to delete this item?")) {
+        return;
+      }
+
+      var url = $rootScope.buildURL("items");
+      var request = Restangular.oneUrl(url, url);
+      request.uuids = [ext.uuid];
+      request.remove().then(function(response){
+        $scope.extensions = _.difference($scope.extensions, [ext]);
+      })
+      .catch(function(response){
+        console.log("Destroy error:", response);
+      })
+    }
+
     $scope.getInitialExtensions();
 
     $scope.performBackupForExt = function(ext) {
