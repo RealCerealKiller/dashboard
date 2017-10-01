@@ -370,7 +370,7 @@ var ExtensionsCtrl = function ExtensionsCtrl($rootScope, $scope, Restangular, $s
 
 angular.module('app').controller('ExtensionsCtrl', ExtensionsCtrl);
 ;
-var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $stateParams) {
+var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $stateParams, $location) {
   _classCallCheck(this, HomeCtrl);
 
   $scope.formData = {};
@@ -381,8 +381,15 @@ var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $state
     $scope.formData.server = "https://n3.standardnotes.org";
   }
 
-  $scope.formData.email = $stateParams.id;
-  $scope.formData.password = $stateParams.pw;
+  var hashParams = parametersFromURL($location.hash());
+  if (hashParams.server) {
+    $scope.formData.email = hashParams.id;
+    $scope.formData.password = hashParams.pw;
+    $scope.formData.server = hashParams.server;
+  } else {
+    $scope.formData.email = $stateParams.id;
+    $scope.formData.password = $stateParams.pw;
+  }
 
   $scope.submitLogin = function () {
     var url = $scope.formData.server + "/auth/sign_in";
@@ -401,6 +408,15 @@ var HomeCtrl = function HomeCtrl($rootScope, $scope, Restangular, $state, $state
     });
   };
 };
+
+function parametersFromURL(url) {
+  url = url.split("#").slice(-1)[0];
+  var obj = {};
+  url.replace(/([^=&]+)=([^&]*)/g, function (m, key, value) {
+    obj[decodeURIComponent(key)] = decodeURIComponent(value);
+  });
+  return obj;
+}
 
 angular.module('app').controller('HomeCtrl', HomeCtrl);
 ;angular.module('app').config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
